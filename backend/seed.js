@@ -1,7 +1,13 @@
 require('dotenv').config();
+const bcrypt = require('bcryptjs');
 const sequelize = require('./src/config/database');
 const Guiche = require('./src/models/Guiche');
 const Atendente = require('./src/models/Atendente');
+
+const usuarios = [
+  { login: 'atendente1', nome: 'Atendente Teste', perfil: 'atendente', senha: 'atendente123' },
+  { login: 'gestor1', nome: 'Gestor Teste', perfil: 'gestor', senha: 'gestor123' },
+];
 
 async function seed() {
   await sequelize.sync();
@@ -13,17 +19,20 @@ async function seed() {
     });
   }
 
-  await Atendente.findOrCreate({
-    where: { login: 'atendente1' },
-    defaults: { nome: 'Atendente Teste', senhaHash: 'TROCAR_QUANDO_TIVER_LOGIN', perfil: 'atendente' },
-  });
+  for (const u of usuarios) {
+    const senhaHash = await bcrypt.hash(u.senha, 10);
 
-  await Atendente.findOrCreate({
-    where: { login: 'gestor1' },
-    defaults: { nome: 'Gestor Teste', senhaHash: 'TROCAR_QUANDO_TIVER_LOGIN', perfil: 'gestor' },
-  });
+    const [atendente] = await Atendente.findOrCreate({
+      where: { login: u.login },
+      defaults: { nome: u.nome, perfil: u.perfil, senhaHash },
+    });
+
+    // Se já existia, atualiza o hash (troca o texto provisório pela senha criptografada)
+    await atendente.update({ nome: u.nome, perfil: u.perfil, senhaHash });
+  }
 
   console.log('Seed concluído.');
+  console.log('Logins de teste: atendente1 / atendente123  |  gestor1 / gestor123');
   await sequelize.close();
 }
 
