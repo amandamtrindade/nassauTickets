@@ -1,4 +1,4 @@
-#Requisitos Funcionais
+# Requisitos Funcionais
 
 RF01 – O sistema deve permitir que o cliente emita uma senha de atendimento.
 
