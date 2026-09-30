@@ -14,7 +14,7 @@
 | Amanda Medeiros |01896858 | Scrum Master |
 | Victory Lesson | 01887163 | Desenvolvedor |
 | Maria Cecília |            | Desenvolvedora|
-| Victor Emmanuel |           | Teste   |
+| Victor Emmanuel | 01942107 |Teste   |
 ## Considerações
 
 
