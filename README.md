@@ -1,6 +1,12 @@
 # nassauTickets
 ## Descrição
-
+## Objetivo
+## Tecnologias
+## Arquitetura
+## Instrução de instalação
+## Instrução de execução
+## Configuração
+## Branches
 
 
 
