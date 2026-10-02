@@ -6,7 +6,7 @@
 
 
 
-## Integrantes 
+## Membros  
 | Nome | Matrícula | Papel |
 |------|-----------|-------|
 | Camila Souza | 01875506 | Documentação|
