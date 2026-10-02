@@ -10,6 +10,12 @@ Desenvolver uma solução capaz de gerenciar filas de atendimento de forma organ
 ## Instrução de execução
 ## Configuração
 ## Branches
+| Branch | Descrição |
+|----------|----------|
+| main | Branch principal do projeto. |
+| dev | Branch utilizada para integração e desenvolvimento das funcionalidades. |
+| feature/frontend | Branch destinada ao desenvolvimento da interface do sistema. |
+| feat/testes-backend | Branch destinada à validação dos testes do backend. |
 ## Membros  
 | Nome | Matrícula | Papel |
 |------|-----------|-------|
