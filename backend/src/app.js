@@ -21,10 +21,16 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Tratamento de erro genérico, para o frontend/painel não quebrar em silêncio
+// Tratamento de erro: se for erro de cliente (status 4xx), retorna o status correspondente
 app.use((err, req, res, next) => {
+  const status = err.status || err.statusCode;
+  if (status && status >= 400 && status < 500) {
+    return res.status(status).json({ erro: err.message || 'Requisição inválida' });
+  }
+
   console.error(err);
   res.status(500).json({ erro: 'Erro interno do servidor' });
 });
+
 
 module.exports = app;

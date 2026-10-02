@@ -11,7 +11,10 @@ let ultimoGrupoChamado = null; // 'SP' | 'SE_SG'
 async function buscarProximaDaFila(tipo) {
   return Senha.findOne({
     where: { tipo, estado: 'AGUARDANDO' },
-    order: [['dataEmissao', 'ASC']],
+    order: [
+      ['dataEmissao', 'ASC'],
+      ['id', 'ASC'],
+    ],
   });
 }
 
@@ -46,6 +49,8 @@ async function proximaSenha() {
   candidata = await buscarProximaDaFila('SP');
   if (candidata) {
     ultimoGrupoChamado = 'SP';
+  } else {
+    ultimoGrupoChamado = null;
   }
 
   return candidata; // pode ser null se não houver nenhuma senha aguardando
@@ -96,6 +101,10 @@ async function finalizarAtendimento(senhaId) {
   return senha;
 }
 
+function resetEstadoFila() {
+  ultimoGrupoChamado = null;
+}
+
 module.exports = {
   proximaSenha,
   chamarSenha,
@@ -103,4 +112,5 @@ module.exports = {
   marcarNaoCompareceu,
   iniciarAtendimento,
   finalizarAtendimento,
+  resetEstadoFila,
 };

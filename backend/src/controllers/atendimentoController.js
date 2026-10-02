@@ -2,7 +2,7 @@ const filaService = require('../services/filaService');
 
 async function chamar(req, res) {
   try {
-    const { guicheId } = req.body;
+    const { guicheId } = req.body || {};
     const senha = await filaService.chamarSenha(guicheId);
 
     if (!senha) {
@@ -18,7 +18,10 @@ async function chamar(req, res) {
 
 async function chamarNovamente(req, res) {
   try {
-    const { senhaId } = req.body;
+    const { senhaId } = req.body || {};
+    if (!senhaId) {
+      return res.status(400).json({ erro: 'Informe a senha' });
+    }
     const senha = await filaService.chamarNovamente(senhaId);
     return res.json(senha);
   } catch (error) {
@@ -29,7 +32,10 @@ async function chamarNovamente(req, res) {
 
 async function naoCompareceu(req, res) {
   try {
-    const { senhaId } = req.body;
+    const { senhaId } = req.body || {};
+    if (!senhaId) {
+      return res.status(400).json({ erro: 'Informe a senha' });
+    }
     const senha = await filaService.marcarNaoCompareceu(senhaId);
     return res.json(senha);
   } catch (error) {
@@ -40,7 +46,10 @@ async function naoCompareceu(req, res) {
 
 async function iniciar(req, res) {
   try {
-    const { senhaId, atendenteId } = req.body;
+    const { senhaId, atendenteId } = req.body || {};
+    if (!senhaId || !atendenteId) {
+      return res.status(400).json({ erro: 'Informe a senha e o atendente' });
+    }
     const senha = await filaService.iniciarAtendimento(senhaId, atendenteId);
     return res.json(senha);
   } catch (error) {
@@ -51,7 +60,10 @@ async function iniciar(req, res) {
 
 async function finalizar(req, res) {
   try {
-    const { senhaId } = req.body;
+    const { senhaId } = req.body || {};
+    if (!senhaId) {
+      return res.status(400).json({ erro: 'Informe a senha' });
+    }
     const senha = await filaService.finalizarAtendimento(senhaId);
     return res.json(senha);
   } catch (error) {

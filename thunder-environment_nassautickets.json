@@ -1,0 +1,21 @@
+{
+  "clientName": "Thunder Client",
+  "environmentName": "nassauTickets - Localhost",
+  "environmentId": "nassautickets-env-001",
+  "dateExported": "2026-10-01",
+  "version": "1.2",
+  "variables": [
+    {
+      "name": "baseUrl",
+      "value": "http://localhost:3333"
+    },
+    {
+      "name": "tokenAtendente",
+      "value": ""
+    },
+    {
+      "name": "tokenGestor",
+      "value": ""
+    }
+  ]
+}

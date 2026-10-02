@@ -3,9 +3,9 @@ const { Senha } = require('../models');
 
 async function emitir(req, res) {
   try {
-    const { tipo } = req.body; // 'SP' | 'SG' | 'SE'
+    const { tipo } = req.body || {};
 
-    if (!['SP', 'SG', 'SE'].includes(tipo)) {
+    if (!tipo || !['SP', 'SG', 'SE'].includes(tipo)) {
       return res.status(400).json({ erro: 'Tipo de senha inválido' });
     }
 

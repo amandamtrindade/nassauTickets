@@ -1,0 +1,773 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "nassauTickets - Bateria de Testes Backend",
+  "collectionId": "nassautickets-suite-001",
+  "dateExported": "2026-10-01",
+  "version": "1.2",
+  "folders": [
+    {
+      "_id": "fld_auth",
+      "name": "01 - Autenticação & Controle de Acesso",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 10000
+    },
+    {
+      "_id": "fld_seguranca",
+      "name": "02 - Rotas sem Token (Segurança)",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 20000
+    },
+    {
+      "_id": "fld_fila_vazia",
+      "name": "03 - Fila Vazia",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 30000
+    },
+    {
+      "_id": "fld_emissao",
+      "name": "04 - Emissão de Senhas (Prioridade & Formato)",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 40000
+    },
+    {
+      "_id": "fld_chamada",
+      "name": "05 - Ordem de Chamada (Alternância SP/SE/SG)",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 50000
+    },
+    {
+      "_id": "fld_painel",
+      "name": "06 - Painel de Chamadas (Máx 5)",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 60000
+    },
+    {
+      "_id": "fld_ciclo",
+      "name": "07 - Ciclo de Atendimento Completo",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 70000
+    },
+    {
+      "_id": "fld_ausencia",
+      "name": "08 - Rechamada & Não Comparecimento",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 80000
+    },
+    {
+      "_id": "fld_relatorios",
+      "name": "09 - Relatórios Gerenciais & RBAC",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 90000
+    },
+    {
+      "_id": "fld_erros",
+      "name": "10 - Tratamento de Erros de Cliente (4xx)",
+      "containerId": "",
+      "created": "2026-10-01",
+      "sortNum": 100000
+    }
+  ],
+  "requests": [
+    {
+      "_id": "req_auth_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_auth",
+      "name": "01.1 - Login Atendente (Correto 200)",
+      "url": "{{baseUrl}}/auth/login",
+      "method": "POST",
+      "sortNum": 10100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"login\": \"atendente1\",\n  \"senha\": \"atendente123\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.token", "action": "is-not-empty", "value": "" }
+      ]
+    },
+    {
+      "_id": "req_auth_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_auth",
+      "name": "01.2 - Login Gestor (Correto 200)",
+      "url": "{{baseUrl}}/auth/login",
+      "method": "POST",
+      "sortNum": 10200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"login\": \"gestor1\",\n  \"senha\": \"gestor123\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.token", "action": "is-not-empty", "value": "" }
+      ]
+    },
+    {
+      "_id": "req_auth_03",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_auth",
+      "name": "01.3 - Login Senha Errada (401)",
+      "url": "{{baseUrl}}/auth/login",
+      "method": "POST",
+      "sortNum": 10300,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"login\": \"atendente1\",\n  \"senha\": \"senha_incorreta\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "401" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Login ou senha inválidos" }
+      ]
+    },
+    {
+      "_id": "req_auth_04",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_auth",
+      "name": "01.4 - Login Corpo Vazio (400)",
+      "url": "{{baseUrl}}/auth/login",
+      "method": "POST",
+      "sortNum": 10400,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "400" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Informe login e senha" }
+      ]
+    },
+    {
+      "_id": "req_sec_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_seguranca",
+      "name": "02.1 - Chamar Senha sem Token (401)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 20100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "401" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Token não informado" }
+      ]
+    },
+    {
+      "_id": "req_sec_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_seguranca",
+      "name": "02.2 - Relatório Diário sem Token (401)",
+      "url": "{{baseUrl}}/relatorios/diario",
+      "method": "GET",
+      "sortNum": 20200,
+      "created": "2026-10-01",
+      "headers": [],
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "401" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Token não informado" }
+      ]
+    },
+    {
+      "_id": "req_fila_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_fila_vazia",
+      "name": "03.1 - Chamar Senha em Fila Vazia (200 Mensagem)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 30100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.mensagem", "action": "equal", "value": "Nenhuma senha aguardando na fila" }
+      ]
+    },
+    {
+      "_id": "req_emissao_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.1 - Emitir SP 1 (esperado SP001)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SP\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SP" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "AGUARDANDO" }
+      ]
+    },
+    {
+      "_id": "req_emissao_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.2 - Emitir SP 2 (esperado SP002)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SP\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" }
+      ]
+    },
+    {
+      "_id": "req_emissao_03",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.3 - Emitir SE 1 (esperado SE001)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40300,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SE\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" }
+      ]
+    },
+    {
+      "_id": "req_emissao_04",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.4 - Emitir SE 2 (esperado SE002)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40400,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SE\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" }
+      ]
+    },
+    {
+      "_id": "req_emissao_05",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.5 - Emitir SG 1 (esperado SG001)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40500,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SG\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" }
+      ]
+    },
+    {
+      "_id": "req_emissao_06",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.6 - Emitir SG 2 (esperado SG002)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40600,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SG\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" }
+      ]
+    },
+    {
+      "_id": "req_emissao_07",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_emissao",
+      "name": "04.7 - Emitir SP 3 (esperado SP003)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 40700,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"SP\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" }
+      ]
+    },
+    {
+      "_id": "req_chamada_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.1 - Chamar 1ª vez (esperado SP001)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SP" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_chamada_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.2 - Chamar 2ª vez (esperado SE001)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SE" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_chamada_03",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.3 - Chamar 3ª vez (esperado SP002)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50300,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SP" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_chamada_04",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.4 - Chamar 4ª vez (esperado SE002)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50400,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SE" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_chamada_05",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.5 - Chamar 5ª vez (esperado SP003)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50500,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SP" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_chamada_06",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.6 - Chamar 6ª vez (esperado SG001)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50600,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SG" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_chamada_07",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_chamada",
+      "name": "05.7 - Chamar 7ª vez (esperado SG002)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 50700,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.tipo", "action": "equal", "value": "SG" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA" }
+      ]
+    },
+    {
+      "_id": "req_painel_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_painel",
+      "name": "06.1 - Consultar Painel (Verificar Máximo de 5)",
+      "url": "{{baseUrl}}/senhas/painel",
+      "method": "GET",
+      "sortNum": 60100,
+      "created": "2026-10-01",
+      "headers": [],
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" }
+      ]
+    },
+    {
+      "_id": "req_ciclo_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_ciclo",
+      "name": "07.1 - Iniciar Atendimento (EM_ATENDIMENTO)",
+      "url": "{{baseUrl}}/atendimento/iniciar",
+      "method": "POST",
+      "sortNum": 70100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 1,\n  \"atendenteId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "EM_ATENDIMENTO" },
+        { "type": "json-query", "custom": "json.inicioAtendimento", "action": "is-not-empty", "value": "" }
+      ]
+    },
+    {
+      "_id": "req_ciclo_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_ciclo",
+      "name": "07.2 - Finalizar Atendimento (ATENDIDA)",
+      "url": "{{baseUrl}}/atendimento/finalizar",
+      "method": "POST",
+      "sortNum": 70200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "ATENDIDA" },
+        { "type": "json-query", "custom": "json.fimAtendimento", "action": "is-not-empty", "value": "" }
+      ]
+    },
+    {
+      "_id": "req_ausencia_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_ausencia",
+      "name": "08.1 - Chamar Novamente (2ª Chamada - CHAMADA_NOVAMENTE)",
+      "url": "{{baseUrl}}/atendimento/chamar-novamente",
+      "method": "POST",
+      "sortNum": 80100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 2\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "CHAMADA_NOVAMENTE" },
+        { "type": "json-query", "custom": "json.segundaChamada", "action": "is-not-empty", "value": "" }
+      ]
+    },
+    {
+      "_id": "req_ausencia_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_ausencia",
+      "name": "08.2 - Tentativa de 3ª Chamada (Rejeição 400)",
+      "url": "{{baseUrl}}/atendimento/chamar-novamente",
+      "method": "POST",
+      "sortNum": 80200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 2\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "400" }
+      ]
+    },
+    {
+      "_id": "req_ausencia_03",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_ausencia",
+      "name": "08.3 - Marcar Não Compareceu (NAO_COMPARECEU)",
+      "url": "{{baseUrl}}/atendimento/nao-compareceu",
+      "method": "POST",
+      "sortNum": 80300,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 2\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.estado", "action": "equal", "value": "NAO_COMPARECEU" }
+      ]
+    },
+    {
+      "_id": "req_relatorio_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_relatorios",
+      "name": "09.1 - Atendente tentando abrir Relatório (Proibido 403)",
+      "url": "{{baseUrl}}/relatorios/diario",
+      "method": "GET",
+      "sortNum": 90100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "403" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Acesso restrito ao gestor" }
+      ]
+    },
+    {
+      "_id": "req_relatorio_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_relatorios",
+      "name": "09.2 - Gestor abrindo Relatório Diário (200 - Contagem Atendida)",
+      "url": "{{baseUrl}}/relatorios/diario",
+      "method": "GET",
+      "sortNum": 90200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {{tokenGestor}}" }
+      ],
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "200" },
+        { "type": "json-query", "custom": "json.atendidas", "action": "greater-than", "value": "0" }
+      ]
+    },
+    {
+      "_id": "req_erro_01",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_erros",
+      "name": "10.1 - Emitir Senha com Tipo Inválido (400)",
+      "url": "{{baseUrl}}/senhas",
+      "method": "POST",
+      "sortNum": 100100,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"tipo\": \"INVALIDO\"\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "400" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Tipo de senha inválido" }
+      ]
+    },
+    {
+      "_id": "req_erro_02",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_erros",
+      "name": "10.2 - Iniciar Atendimento com Senha Inexistente (400)",
+      "url": "{{baseUrl}}/atendimento/iniciar",
+      "method": "POST",
+      "sortNum": 100200,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 99999,\n  \"atendenteId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "400" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Senha não encontrada" }
+      ]
+    },
+    {
+      "_id": "req_erro_03",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_erros",
+      "name": "10.3 - Finalizar Atendimento com Senha Inexistente (400)",
+      "url": "{{baseUrl}}/atendimento/finalizar",
+      "method": "POST",
+      "sortNum": 100300,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer {{tokenAtendente}}" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"senhaId\": 99999\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "400" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Senha não encontrada" }
+      ]
+    },
+    {
+      "_id": "req_erro_04",
+      "colId": "nassautickets-suite-001",
+      "containerId": "fld_erros",
+      "name": "10.4 - Chamar Senha com Token Malformado (401)",
+      "url": "{{baseUrl}}/atendimento/chamar",
+      "method": "POST",
+      "sortNum": 100400,
+      "created": "2026-10-01",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "Bearer token_completamente_invalido" }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"guicheId\": 1\n}"
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "401" },
+        { "type": "json-query", "custom": "json.erro", "action": "equal", "value": "Token inválido ou expirado" }
+      ]
+    }
+  ]
+}
