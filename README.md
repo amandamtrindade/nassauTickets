@@ -20,7 +20,7 @@ Desenvolver uma solução capaz de gerenciar filas de atendimento de forma organ
 | Maria Cecília | 01877489 | Desenvolvedora|
 | Victor Emmanuel | 01942107 |Teste   |
 ## Considerações
-Após a sessão de testes (conforme solicitado e documentado), asseguramos   que o sistema está funcionando corretamente, conforme proposto na atividade.
+Após a sessão de testes (conforme solicitado e documentado), asseguramos   que o sistema está funcionando corretamente,atendendo à solicitação proposta na atividade.
 
 
 
