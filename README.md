@@ -36,7 +36,7 @@ Passos:
 3. npm install
 4. npm run seed (cria guichês 1, 2, 3 e atendentes de teste)
 5. npm run dev (API em http://localhost:3333)
-*Rotas (todas em http://localhost:3333)*
+### *Rotas (todas em http://localhost:3333)*
 - POST /senhas → { "tipo": "SP" }
 - GET /senhas/painel
 - POST /atendimento/chamar → { "guicheId": 1 }
