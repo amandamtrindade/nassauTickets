@@ -1,0 +1,5 @@
+.marca { display: flex; align-items: center; margin-right: auto; }
+.logo { display: inline-flex; align-items: center; gap: 10px; color: var(--tinta); font-size: 1.25rem; }
+.logo svg { height: 34px; width: 34px; flex: none; }
+.logo-texto b { font-weight: 700; }
+form.linha { flex-direction: row; }
