@@ -1,0 +1,18 @@
+# NassauTickets
+
+## Conceito
+
+Uma senha de atendimento: o ticket com os dois recortes laterais e o picote tracejado, e a letra N de Nassau dentro. O nome é escrito junto, com Nassau em negrito e Tickets em peso normal.
+
+## Paleta
+
+| Nome | Hex | Uso |
+|------|------|------|
+| Verde Nassau | #16A34A | Cor principal, ícone, botões no tema claro |
+| Verde Floresta | #166534 | Títulos e cabeçalhos de tabela no tema claro |
+| Verde Vivo | #22C55E | Botões e destaques no tema escuro |
+| Verde Névoa | #86EFAC | Detalhes e degradês |
+| Fundo Claro | #F3FAF5 | Fundo da página no tema claro |
+| Fundo Escuro | #0B1A12 | Fundo da página no tema escuro |
+| Tinta | #14301F | Texto e wordmark em fundo claro |
+| Alerta | #B91C1C | Ações de risco (Não compareceu) |
