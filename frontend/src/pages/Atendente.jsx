@@ -1,38 +1,61 @@
 import { useState } from "react";
-import { api } from "../api.js";
+import { api, getUsuario } from "../api.js";
+
+// Prefixo em que o router de atendimento foi registrado no app.js do back-end.
+// Confira a linha app.use('/???', atendimentoRoutes) e ajuste aqui se for outro.
+const PREFIXO = "/atendimento";
 
 export default function Atendente() {
-  const [guiche, setGuiche] = useState("1");
+  const [guicheId, setGuicheId] = useState("1");
   const [senha, setSenha] = useState(null); // senha em atendimento
   const [erro, setErro] = useState("");
   const [msg, setMsg] = useState("");
   const [ocupado, setOcupado] = useState(false);
 
-  async function executar(fn, aviso) {
+  const estado = senha?.estado?.toUpperCase();
+  const codigo = senha && (senha.codigo ?? senha.numero ?? senha.id);
+
+  async function executar(rota, corpo, aoConcluir) {
     setErro(""); setMsg(""); setOcupado(true);
-    try { await fn(); if (aviso) setMsg(aviso); }
-    catch (e) { setErro(e.message); }
-    finally { setOcupado(false); }
+    try {
+      const r = await api(`${PREFIXO}/${rota}`, { method: "POST", body: corpo });
+      aoConcluir(r);
+    } catch (e) {
+      setErro(e.message);
+    } finally {
+      setOcupado(false);
+    }
   }
 
-  // Cada ação devolve a senha atualizada; se vier vazio, ajusta o status local.
-  const acao = (rota, novoStatus, aviso) => () =>
-    executar(async () => {
-      const r = await api(`/senhas/${senha.id}/${rota}`, { method: "POST" });
-      const atualizada = r?.id ? r : { ...senha, status: novoStatus };
-      setSenha(["FINALIZADA", "NAO_COMPARECEU"].includes(atualizada.status) ? null : atualizada);
-    }, aviso);
-
-  const chamarProxima = (e) => {
+  function chamarProxima(e) {
     e.preventDefault();
-    executar(async () => {
-      const r = await api("/senhas/chamar", { method: "POST", body: { guiche: Number(guiche) } });
-      if (!r) setMsg("Fila vazia.");
-      else setSenha(r);
+    executar("chamar", { guicheId: Number(guicheId) }, (r) => {
+      if (r?.id) setSenha(r);
+      else setMsg(r?.mensagem || "Nenhuma senha aguardando na fila.");
     });
-  };
+  }
 
-  const status = senha?.status?.toUpperCase();
+  // Ações sobre a senha atual. Todas enviam senhaId no corpo.
+  const iniciar = () =>
+    executar("iniciar", { senhaId: senha.id, atendenteId: getUsuario()?.id }, (r) => setSenha(r?.id ? r : senha));
+
+  const chamarNovamente = () =>
+    executar("chamar-novamente", { senhaId: senha.id }, (r) => {
+      setSenha(r?.id ? r : senha);
+      setMsg("Senha chamada novamente.");
+    });
+
+  const finalizar = () =>
+    executar("finalizar", { senhaId: senha.id }, () => {
+      setSenha(null);
+      setMsg(`Senha ${codigo} finalizada.`);
+    });
+
+  const naoCompareceu = () =>
+    executar("nao-compareceu", { senhaId: senha.id }, () => {
+      setSenha(null);
+      setMsg(`Senha ${codigo} marcada como não compareceu.`);
+    });
 
   return (
     <section>
@@ -41,7 +64,7 @@ export default function Atendente() {
       {!senha && (
         <form className="linha" onSubmit={chamarProxima}>
           <label>Guichê
-            <input type="number" min="1" value={guiche} onChange={(e) => setGuiche(e.target.value)} required />
+            <input type="number" min="1" value={guicheId} onChange={(e) => setGuicheId(e.target.value)} required />
           </label>
           <button className="botao" disabled={ocupado}>Chamar próxima</button>
         </form>
@@ -50,22 +73,16 @@ export default function Atendente() {
       {senha && (
         <div className="cartao">
           <p className="rotulo">Senha atual</p>
-          <strong className="codigo">{senha.codigo ?? senha.numero ?? senha.id}</strong>
-          <p>Status: {status || "—"}</p>
+          <strong className="codigo">{codigo}</strong>
+          <p>Situação: {estado || "—"}</p>
           <div className="linha">
-            {status === "EM_ATENDIMENTO" ? (
-              <button className="botao" disabled={ocupado} onClick={acao("finalizar", "FINALIZADA", "Atendimento finalizado.")}>
-                Finalizar
-              </button>
+            {estado === "EM_ATENDIMENTO" ? (
+              <button className="botao" disabled={ocupado} onClick={finalizar}>Finalizar</button>
             ) : (
               <>
-                <button className="botao" disabled={ocupado} onClick={acao("iniciar", "EM_ATENDIMENTO")}>Iniciar</button>
-                <button className="botao sec" disabled={ocupado} onClick={acao("rechamar", "CHAMADA", "Senha chamada novamente.")}>
-                  Chamar novamente
-                </button>
-                <button className="botao perigo" disabled={ocupado} onClick={acao("nao-compareceu", "NAO_COMPARECEU", "Marcada como não compareceu.")}>
-                  Não compareceu
-                </button>
+                <button className="botao" disabled={ocupado} onClick={iniciar}>Iniciar</button>
+                <button className="botao sec" disabled={ocupado} onClick={chamarNovamente}>Chamar novamente</button>
+                <button className="botao perigo" disabled={ocupado} onClick={naoCompareceu}>Não compareceu</button>
               </>
             )}
           </div>

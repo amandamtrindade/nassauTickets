@@ -5,6 +5,7 @@ import Painel from "./pages/Painel.jsx";
 import Login from "./pages/Login.jsx";
 import Atendente from "./pages/Atendente.jsx";
 import Relatorios from "./pages/Relatorios.jsx";
+import Logo from "./Logo.jsx";
 
 export default function App() {
   const [usuario, setUsuario] = useState(getUsuario());
@@ -36,7 +37,7 @@ export default function App() {
   return (
     <>
       <header className="topo">
-        <strong className="marca">Senhas</strong>
+       <span className="marca"><Logo /></span>
         <nav>
           {abas.map(([id, rotulo]) => (
             <button key={id} className={tela === id ? "aba ativa" : "aba"} onClick={() => setTela(id)}>

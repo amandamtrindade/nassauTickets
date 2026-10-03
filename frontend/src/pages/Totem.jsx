@@ -3,8 +3,9 @@ import { api } from "../api.js";
 
 // Ajustado os tipos conforme a API .
 const TIPOS = [
-  { valor: "SG", rotulo: "Atendimento normal" },
-  { valor: "SP", rotulo: "Preferencial" },
+  { valor: "SP", rotulo: "Prioritária (SP)" },
+  { valor: "SG", rotulo: "Geral (SG)" },
+  { valor: "SE", rotulo: "Exames (SE)"}
 
 ];
 
